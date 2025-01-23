@@ -1,0 +1,39 @@
+Strings with Balanced Parenthesis
+=================================
+< S > ::= ""
+          | "()"
+          | "(" < S > ")"
+          | < S > < S >
+
+
+C++ Identifiers
+===============
+< Ident > ::= < Letter >
+              | "_"
+              | < Ident > "_"
+              | < Ident > < Letter >
+              | < Ident > < Digit >
+
+< Letter > ::= Any upper or lower case Letter
+
+< Digit >  ::= Any digit 0-9
+
+
+Palindromic Strings over a,b
+============================
+< S > ::= ""
+          | "a"
+          | "b"
+          | "a" < S > "a"
+          | "b" < S > "b"
+
+
+Strings Representing Integers
+=============================
+< Integer > ::= < Integer' > 
+                | "-" < Integer' >
+                
+< Integer'> ::= < Digit >
+                | < Integer > < Digit >
+
+< Digit> ::= Any digit 0-9
