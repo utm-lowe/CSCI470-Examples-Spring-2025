@@ -1,0 +1,20 @@
+Program ::= Number
+            | Exp
+
+Exp ::= Number
+        | (+ Exp Exp+)
+        | (- Exp Exp+)
+        | (- Exp)
+        | (* Exp Exp+)
+        | (/ Exp Exp+)
+        | (^ Exp Exp+)
+
+Number  ::= Digit
+            | DigitNotZero Digit+
+            | - Digit
+            | - DigitNotZero Digit+
+            | Number . Digit+
+
+Digit        ::= [0-9]
+
+DigitNotZero ::= [1-9]
