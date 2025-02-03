@@ -53,6 +53,25 @@ public class Evaluator implements Visitor<Value> {
 	}
 
 	@Override
+	public Value visit(PowExp e) {
+		List<Exp> operands = e.all();
+		NumVal lVal = (NumVal) operands.get(0).accept(this);
+		double result = lVal.v();
+		for(int i=1; i<operands.size(); i++) {
+			NumVal rVal = (NumVal) operands.get(i).accept(this);
+			result = Math.pow(result, rVal.v());
+		}
+		return new NumVal(result);
+	}
+
+	@Override
+	public Value visit(NegExp e) {
+		NumVal rVal = (NumVal) e.getExp().accept(this);
+		return new NumVal(-rVal.v());
+	}
+
+
+	@Override
 	public Value visit(Program p) {
 		return (Value) p.e().accept(this);
 	}

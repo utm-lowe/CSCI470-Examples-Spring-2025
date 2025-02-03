@@ -43,6 +43,8 @@ grammar ArithLang;
         | s=subexp { $ast = $s.ast; }
         | m=multexp { $ast = $m.ast; }
         | d=divexp { $ast = $d.ast; }
+		| p=powexp { $ast = $p.ast; }
+		| neg=negexp { $ast = $neg.ast; }
         ;
  
  // The actions { $ast = $n.ast; } means that this rule passed through 
@@ -124,6 +126,18 @@ grammar ArithLang;
  		')' { $ast = new DivExp($list); }
  		;
 
+ powexp returns [PowExp ast]
+		locals [ArrayList<Exp> list]
+		@init { $list = new ArrayList<Exp>(); } :
+		'(' '^'
+			e=exp { $list.add($e.ast);}
+			( e=exp { $list.add($e.ast);})+
+		')' { $ast = new PowExp($list); }
+		;
+
+ negexp returns [NegExp ast]:
+		'(' '-' e=exp ')' { $ast=new NegExp($e.ast); }
+		;
 
  // Lexical Specification of this Programming Language
  //  - lexical specification rules start with uppercase
