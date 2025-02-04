@@ -45,6 +45,7 @@ grammar ArithLang;
         | d=divexp { $ast = $d.ast; }
 		| p=powexp { $ast = $p.ast; }
 		| neg=negexp { $ast = $neg.ast; }
+		| in=infixadd { $ast = $in.ast;}
         ;
  
  // The actions { $ast = $n.ast; } means that this rule passed through 
@@ -138,6 +139,17 @@ grammar ArithLang;
  negexp returns [NegExp ast]:
 		'(' '-' e=exp ')' { $ast=new NegExp($e.ast); }
 		;
+
+ infixadd returns [Exp ast]
+     locals [ArrayList<Exp> list]:
+	l=infixadd '+' r=exp { 
+                            $list = new ArrayList<Exp>();
+							$list.add($l.ast);
+							$list.add($r.ast);
+							$ast = new AddExp($list);		 
+	                     }
+	| n=numexp {$ast = $n.ast;}
+	      ;
 
  // Lexical Specification of this Programming Language
  //  - lexical specification rules start with uppercase
