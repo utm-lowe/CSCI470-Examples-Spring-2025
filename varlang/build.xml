@@ -1,0 +1,59 @@
+<?xml version="1.0" ?>
+<project name="lang" default="parser">
+
+	<!-- ANTLR version -->
+	<property name="antlr.version" value="4.5" />
+
+	<!-- VarLang parser -->
+	<target name="varlang-check-parser">
+		<condition property="varlang.parser.uptodate">
+			<and>
+				<uptodate srcfile="src/varlang/VarLang.g" targetfile="src/varlang/parser/VarLangParser.java" />
+				<uptodate srcfile="src/varlang/VarLang.g" targetfile="src/varlang/parser/VarLangLexer.java" />
+				<uptodate srcfile="src/varlang/VarLang.g" targetfile="src/varlang/parser/VarLangListener.java" />
+			</and>
+		</condition>
+	</target>
+
+	<target name="varlang" depends="varlang-check-parser" unless="varlang.parser.uptodate">
+		<java jar="lib/antlr-${antlr.version}-complete.jar" dir="src/varlang/" fork="true" failonerror="true">
+			<arg value="-o" />
+			<arg value="parser/" />
+			<arg value="-no-listener" />
+			<arg value="-package" />
+			<arg value="varlang.parser; import static varlang.AST.*" />
+			<arg value="VarLang.g" />
+		</java>
+	</target>
+
+	<target name="parser" depends="varlang" >
+	</target>
+
+        <target name="compile" depends="parser">
+                <mkdir dir="build/classes"/>
+                <javac srcdir="src" destdir="build/classes">
+                        <classpath>
+                                <pathelement path="lib/antlr-4.5-complete.jar"/>
+                        </classpath>
+                </javac>
+        </target>
+
+        <target name="jar" depends="compile">
+                <mkdir dir="build/jar"/>
+                <jar destfile="build/jar/VarLang.jar" basedir="build/classes">
+                        <zipgroupfileset dir="lib" includes="antlr-4.5-complete.jar" />
+                        <manifest>
+                                <attribute name="Main-Class" value="varlang.Interpreter"/>
+                        </manifest>
+                </jar>
+        </target>
+
+        <target name="run" depends="jar">
+                <java jar="build/jar/VarLang.jar" fork="true"/>
+        </target>
+
+        <target name="clean">
+                <delete dir="build"/>
+        </target>
+	
+</project>
