@@ -1,0 +1,59 @@
+<?xml version="1.0" ?>
+<project name="lang" default="parser">
+
+	<!-- ANTLR version -->
+	<property name="antlr.version" value="4.5" />
+
+	<!-- DefineLang parser -->
+	<target name="definelang-check-parser">
+		<condition property="definelang.parser.uptodate">
+			<and>
+				<uptodate srcfile="src/definelang/DefineLang.g" targetfile="src/definelang/parser/DefineLangParser.java" />
+				<uptodate srcfile="src/definelang/DefineLang.g" targetfile="src/definelang/parser/DefineLangLexer.java" />
+				<uptodate srcfile="src/definelang/DefineLang.g" targetfile="src/definelang/parser/DefineLangListener.java" />
+			</and>
+		</condition>
+	</target>
+
+	<target name="definelang" depends="definelang-check-parser" unless="definelang.parser.uptodate">
+		<java jar="lib/antlr-${antlr.version}-complete.jar" dir="src/definelang/" fork="true" failonerror="true">
+			<arg value="-o" />
+			<arg value="parser/" />
+			<arg value="-no-listener" />
+			<arg value="-package" />
+			<arg value="definelang.parser; import static definelang.AST.*" />
+			<arg value="DefineLang.g" />
+		</java>
+	</target>
+
+	<target name="parser" depends="definelang" >
+	</target>
+
+        <target name="compile" depends="parser">
+                <mkdir dir="build/classes"/>
+                <javac srcdir="src" destdir="build/classes">
+                        <classpath>
+                                <pathelement path="lib/antlr-4.5-complete.jar"/>
+                        </classpath>
+                </javac>
+        </target>
+
+        <target name="jar" depends="compile">
+                <mkdir dir="build/jar"/>
+                <jar destfile="build/jar/DefineLang.jar" basedir="build/classes">
+                        <zipgroupfileset dir="lib" includes="antlr-4.5-complete.jar" />
+                        <manifest>
+                                <attribute name="Main-Class" value="definelang.Interpreter"/>
+                        </manifest>
+                </jar>
+        </target>
+
+        <target name="run" depends="jar">
+                <java jar="build/jar/DefineLang.jar" fork="true"/>
+        </target>
+
+        <target name="clean">
+                <delete dir="build"/>
+        </target>
+	
+</project>
