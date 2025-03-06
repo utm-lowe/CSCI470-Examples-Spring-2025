@@ -25,6 +25,7 @@ grammar DefineLang;
         | m=multexp { $ast = $m.ast; }
         | d=divexp { $ast = $d.ast; }
         | l=letexp { $ast = $l.ast; }
+		| set=setexp {$ast = $set.ast; }
         ;
 
  numexp returns [NumExp ast]:
@@ -82,6 +83,13 @@ grammar DefineLang;
  			body=exp 
  			')' { $ast = new LetExp($names, $value_exps, $body.ast); }
  		;
+
+ setexp   returns [SetExp ast]:
+		'(' 'set'
+		id=Identifier
+		e=exp
+		')' { $ast = new SetExp($id.text, $e.ast); }
+		;
 
  // Lexical Specification of this Programming Language
  //  - lexical specification rules start with uppercase

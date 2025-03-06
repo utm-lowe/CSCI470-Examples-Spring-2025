@@ -80,6 +80,13 @@ public class Printer {
 			result += d.value_exp().accept(this, env);
 			return result + ")";
 		}
+
+		public String visit(AST.SetExp s, Env env) {
+			String result = "(set ";
+			result += s.name() + " ";
+			result += s.value_exp().accept(this, env);
+			return result + ")";
+		}
 		
 	}
 

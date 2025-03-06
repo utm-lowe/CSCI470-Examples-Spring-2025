@@ -109,4 +109,14 @@ public class Evaluator implements Visitor<Value> {
 		return new Value.UnitVal();		
 	}	
 
+	@Override
+	public Value visit(SetExp d, Env env) { // New for definelang.
+		String name = d.name();
+		Exp value_exp = d.value_exp();
+		Value value = (Value) value_exp.accept(this, env);
+
+		env.set(name, value);
+		return value;		
+	}	
+
 }

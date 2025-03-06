@@ -275,6 +275,26 @@ public interface AST {
 		public Exp value_exp() { return _value_exp; }
 
 	}
+
+
+	public static class SetExp extends Exp {
+		String _name;
+		Exp _value_exp; 
+		
+		public SetExp(String name, Exp value_exp) {
+			_name = name;
+			_value_exp = value_exp;
+		}
+		
+		public <T> T accept(Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env);
+		}
+		
+		public String name() { return _name; }
+		
+		public Exp value_exp() { return _value_exp; }
+
+	}
 	
 	public interface Visitor <T> {
 		// This interface should contain a signature for each concrete AST node.
@@ -288,5 +308,6 @@ public interface AST {
 		public T visit(AST.VarExp e, Env env);
 		public T visit(AST.LetExp e, Env env); // New for the varlang
 		public T visit(AST.DefineDecl d, Env env); // New for the definelang
+		public T visit(AST.SetExp e, Env env); // New for the definelang
 	}	
 }
