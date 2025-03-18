@@ -1,0 +1,75 @@
+Process for Design
+==================
+1.) Brainstorm and write code in the language.
+2.) Design a formal grammar for the language.
+3.) Build the AST items that we need.
+4.) Build the Evaluator
+5.) ANTLR Grammar
+6.) Test
+
+
+Brainstorming
+=============
+- Entirely functions
+- Function definitions
+  Simple: x <- 5
+  Arguments: f(x,y) <- add(x,y)
+  Multiple Statements: count(x) <- c <- 1;
+                                   body <- print(c);
+                                           $c <= add(c,1).;
+                                   while(lt(c,x), body).
+
+- Intrinsic functions  
+  arithmetic: add(x,y), sub(x,y), mul(x,y), div(x,y), pow(x,y)
+  comparison: eq(x,y), neq(x,y), lt(x,y), gt(x,y), lte(x,y), gte(x,y)
+  logical: and(x,y), or(x,y), not(x)
+  branches/loops: while(x,y), if(x,y,z)
+  misc: rand -> a float between 0 and 1
+        print(x)
+        input
+        null
+  string: cat(x,y), slength(x), smid(x,l,r), string(x)
+
+- Behavior of functions: return the last substatement
+    5; 6; 7.  : returns 7
+
+- Function call:
+   no arg: id
+   with args: id(x,y,...)
+
+- Scoping
+  - Global scope
+  - Functions will all have a local scope
+  - Closures and currying
+  - $id: explicitly refer to the enclosing scope
+    $$id: go out two levels
+
+- identifiers: 
+  non-digit-id-char id-char*
+  non-digit-id-char: [^0-9(),<-=.;$"]
+  -id-char: [^(),<-=.;$"]
+
+- literals: integer, floats, "string"
+
+EBNF
+====
+program ::= exp*
+
+exp ::= (clause ;)* clause .
+
+clause ::= definition
+           | call
+
+definition ::= idexp paramlist? <- exp
+               | idexp paramlist? <= exp  
+
+arglist ::= (clause,* clause)
+paramlist::= (id,* id)
+
+call ::= idexp arglist?
+         | atom
+
+idexp ::= $*id
+
+atom ::= number
+         | string

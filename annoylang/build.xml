@@ -1,0 +1,59 @@
+<?xml version="1.0" ?>
+<project name="lang" default="parser">
+
+	<!-- ANTLR version -->
+	<property name="antlr.version" value="4.5" />
+
+	<!-- AnnoyLang parser -->
+	<target name="annoylang-check-parser">
+		<condition property="annoylang.parser.uptodate">
+			<and>
+				<uptodate srcfile="src/annoylang/AnnoyLang.g" targetfile="src/annoylang/parser/AnnoyLangParser.java" />
+				<uptodate srcfile="src/annoylang/AnnoyLang.g" targetfile="src/annoylang/parser/AnnoyLangLexer.java" />
+				<uptodate srcfile="src/annoylang/AnnoyLang.g" targetfile="src/annoylang/parser/AnnoyLangListener.java" />
+			</and>
+		</condition>
+	</target>
+
+	<target name="annoylang" depends="annoylang-check-parser" unless="annoylang.parser.uptodate">
+		<java jar="lib/antlr-${antlr.version}-complete.jar" dir="src/annoylang/" fork="true" failonerror="true">
+			<arg value="-o" />
+			<arg value="parser/" />
+			<arg value="-no-listener" />
+			<arg value="-package" />
+			<arg value="annoylang.parser; import static annoylang.AST.*" />
+			<arg value="AnnoyLang.g" />
+		</java>
+	</target>
+
+	<target name="parser" depends="annoylang" >
+	</target>
+
+        <target name="compile" depends="parser">
+                <mkdir dir="build/classes"/>
+                <javac srcdir="src" destdir="build/classes">
+                        <classpath>
+                                <pathelement path="lib/antlr-4.5-complete.jar"/>
+                        </classpath>
+                </javac>
+        </target>
+
+        <target name="jar" depends="compile">
+                <mkdir dir="build/jar"/>
+                <jar destfile="build/jar/AnnoyLang.jar" basedir="build/classes">
+                        <zipgroupfileset dir="lib" includes="antlr-4.5-complete.jar" />
+                        <manifest>
+                                <attribute name="Main-Class" value="annoylang.Interpreter"/>
+                        </manifest>
+                </jar>
+        </target>
+
+        <target name="run" depends="jar">
+                <java jar="build/jar/AnnoyLang.jar" fork="true"/>
+        </target>
+
+        <target name="clean">
+                <delete dir="build"/>
+        </target>
+	
+</project>
