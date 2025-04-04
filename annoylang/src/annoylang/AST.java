@@ -73,7 +73,7 @@ public interface AST {
 		}
 	}
 
-	public static class StringExp extends Exp {
+	public static class StringLiteralExp extends Exp {
 		String _string;
 
 		public StringExp(String s) {
@@ -381,12 +381,219 @@ public interface AST {
 		}
 	}
 
+	public class AndExp extends Exp {
+		Exp left, right;
+
+		public AndExp(Exp left, Exp right) {
+			this.left = left;
+			this.right = right;
+		}
+
+		public Exp left() {
+			return left;
+		}
+
+		public Exp right() {
+			return right;
+		}
+
+		public <T> T accept(Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env);
+		}
+	}
+
+	public class OrExp extends Exp {
+		Exp left, right;
+
+		public OrExp(Exp left, Exp right) {
+			this.left = left;
+			this.right = right;
+		}
+
+		public Exp left() {
+			return left;
+		}
+
+		public Exp right() {
+			return right;
+		}
+
+		public <T> T accept(Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env);
+		}
+	}
+
+	public class NotExp extends Exp {
+		Exp exp;
+
+		public NotExp(Exp exp) {
+			this.exp = exp;
+		}
+
+		public Exp exp() {
+			return exp;
+		}
+
+		public <T> T accept(Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env);
+		}
+	}
+
+	public class WhileExp extends Exp {
+		Exp cond, body;
+
+		public WhileExp(Exp cond, Exp body) {
+			this.cond = cond;
+			this.body = body;
+		}
+
+		public Exp cond() {
+			return cond;
+		}
+
+		public Exp body() {
+			return body;
+		}
+
+		public <T> T accept(Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env);
+		}
+	}
+
+	public class IfExp extends Exp {
+		Exp cond, then, els;
+
+		public IfExp(Exp cond, Exp then, Exp els) {
+			this.cond = cond;
+			this.then = then;
+			this.els = els;
+		}
+
+		public Exp cond() {
+			return cond;
+		}
+
+		public Exp then() {
+			return then;
+		}
+
+		public Exp els() {
+			return els;
+		}
+
+		public <T> T accept(Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env);
+		}
+	}
+
+	public class RandExp extends Exp {
+		public RandExp() {}
+
+		public <T> T accept(Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env);
+		}
+	}
+
+	public class PrintExp extends Exp {
+		Exp exp;
+
+		public PrintExp(Exp exp) {
+			this.exp = exp;
+		}
+
+		public Exp exp() {
+			return exp;
+		}
+
+		public <T> T accept(Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env);
+		}
+	}
+
+	public class CatExp extends Exp {
+		Exp left, right;
+
+		public CatExp(Exp left, Exp right) {
+			this.left = left;
+			this.right = right;
+		}
+
+		public Exp left() {
+			return left;
+		}
+
+		public Exp right() {
+			return right;
+		}
+
+		public <T> T accept(Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env);
+		}
+	}
+
+	public class SlengthExp extends Exp {
+		Exp exp;
+
+		public SlengthExp(Exp exp) {
+			this.exp = exp;
+		}
+
+		public Exp exp() {
+			return exp;
+		}
+
+		public <T> T accept(Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env);
+		}
+	}
+
+	public class SmidExp extends Exp {
+		Exp exp, start, end;
+
+		public SmidExp(Exp exp, Exp start, Exp end) {
+			this.exp = exp;
+			this.start = start;
+			this.end = end;
+		}
+
+		public Exp exp() {
+			return exp;
+		}
+
+		public Exp start() {
+			return start;
+		}
+
+		public Exp end() {
+			return end;
+		}
+
+		public <T> T accept(Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env);
+		}
+	}
+
+	public class StringExp extends Exp {
+		Exp _exp;
+
+		public StringExp(Exp e) {
+			_exp = e;
+		}
+
+		public Exp exp() {
+			return _exp;
+		}
+
+		public <T> T accept(Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env);
+		}
+	}
 
 	public interface Visitor <T> {
 		public T visit(Program p, Env env);
 		public T visit(IdExp e, Env env);
 		public T visit(NumExp e, Env env);
-		public T visit(StringExp e, Env env);
+		public T visit(StringLiteralExp e, Env env);
 		public T visit(NullExp e, Env env);
 		public T visit(FunctionDefExp e, Env env);
 		public T visit(CallExp e, Env env);
@@ -401,6 +608,16 @@ public interface AST {
 		public T visit(LteExp e, Env env);
 		public T visit(GtExp e, Env env);
 		public T visit(GteExp e, Env env);
-		
+		public T visit(AndExp e, Env env);
+		public T visit(OrExp e, Env env);
+		public T visit(NotExp e, Env env);
+		public T visit(WhileExp e, Env env);
+		public T visit(IfExp e, Env env);
+		public T visit(RandExp e, Env env);
+		public T visit(PrintExp e, Env env);
+		public T visit(CatExp e, Env env);
+		public T visit(SlengthExp e, Env env);
+		public T visit(SmidExp e, Env env);
+		public T visit(StringExp e, Env env);	
 	}	
 }

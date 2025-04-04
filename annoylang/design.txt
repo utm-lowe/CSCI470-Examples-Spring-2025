@@ -73,3 +73,25 @@ idexp ::= $*id
 
 atom ::= number
          | string
+
+id ::= [^0-9(),<-=.;$"][^(),<-=.;$"]*
+
+number ::= [0-9]+
+           | [0-9]+ . [0-9]+
+
+string ::= "[^"]*"
+
+Type Grammar 
+============
+- What types are compatable with each other?
+- Think about type coercions.
+
+Notes about creating the grammar
+================================
+1.) Create a .g file
+2.) make the grammar statement.
+3.) Separate your grammar into parser and lexer rules.
+4.) Write your lexer rules
+5.) Write your skip rules
+6.) Write your parser rules
+7.) Fill in AST generation
