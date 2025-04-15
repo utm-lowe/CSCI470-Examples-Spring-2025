@@ -1,4 +1,6 @@
 package annoylang;
+import java.util.List;
+import annoylang.AST.Exp;
 
 public interface Value {
     public String toString();
@@ -38,12 +40,19 @@ public interface Value {
             _val = v;
         }
 
+        public NumValue(boolean v) {
+            if(v)
+                _val = 1;
+            else
+                _val = 0;
+        }
+
         public double v() {
             return _val;
         }
 
         public String toString() {
-            String tmp = "" + _val
+            String tmp = "" + _val;
             return tmp;
         }
     }

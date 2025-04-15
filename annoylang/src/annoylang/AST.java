@@ -76,7 +76,7 @@ public interface AST {
 	public static class StringLiteralExp extends Exp {
 		String _string;
 
-		public StringExp(String s) {
+		public StringLiteralExp(String s) {
 			_string = s;
 		}
 
@@ -101,10 +101,10 @@ public interface AST {
 
 	public static class FunctionDefExp extends Exp {
 		IdExp _id;
-		List<IdExp> _params;
+		List<String> _params;
 		Exp _body;
 
-		public FunctionDefExp(IdExp id, List<IdExp> params, Exp body) {
+		public FunctionDefExp(IdExp id, List<String> params, Exp body) {
 			_id = id;
 			_params = params;
 			_body = body;
@@ -114,7 +114,7 @@ public interface AST {
 			return _id;
 		}
 
-		public List<IdExp> params() {
+		public List<String> params() {
 			return _params;
 		}
 
@@ -126,6 +126,28 @@ public interface AST {
 			return visitor.visit(this, env);
 		}
 
+	}
+
+	public static class ValueDefExp extends Exp {
+		IdExp _id;
+		Exp _body;
+
+		public ValueDefExp(IdExp id, Exp body) {
+			_id = id;
+			_body = body;
+		}
+
+		public IdExp id() {
+			return _id;
+		}
+
+		public Exp body() {
+			return _body;
+		}
+
+		public <T> T accept(Visitor<T> visitor, Env env) {
+			return visitor.visit(this, env);
+		}
 	}
 
 	public static class CallExp extends Exp {
@@ -596,6 +618,7 @@ public interface AST {
 		public T visit(StringLiteralExp e, Env env);
 		public T visit(NullExp e, Env env);
 		public T visit(FunctionDefExp e, Env env);
+		public T visit(ValueDefExp e, Env env);
 		public T visit(CallExp e, Env env);
 		public T visit(AddExp e, Env env);
 		public T visit(SubExp e, Env env);

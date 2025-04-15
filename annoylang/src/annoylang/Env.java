@@ -9,14 +9,14 @@ public interface Env {
 
     public static class RefEnv implements Env {
         private final Map<String, Value> values;
-        private final RefEnv parent;
+        private final Env parent;
 
         public RefEnv() {
             this.values = new HashMap<>();
             this.parent = null;
         }
 
-        public RefEnv(RefEnv parent) {
+        public RefEnv(Env parent) {
             this.values = new HashMap<>();
             this.parent = parent;
         }
@@ -34,7 +34,7 @@ public interface Env {
             } else if (parent != null) {
                 return parent.lookup(name);
             } else {
-                throw new Value.Error("undefined variable: " + name);
+                return new Value.Error("undefined variable: " + name);
             }
         }
     }
